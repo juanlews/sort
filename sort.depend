@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1523139893 source:c:\xampp\htdocs\sort\main.cpp
+	<iostream>
+	<stdlib.h>
+	<stdio.h>
+	<fstream>
+	<vector>
+	<string>
+	<iostream>
+	<algorithm>
+	<iterator>
+	<sstream>
+
