@@ -25,9 +25,9 @@ struct dado{
     char price[50];
     char property_type[50];
 };
-void openFile(){
-    FILE *arq;
 
+
+void openFile(int n){
     char cabecalho1[50];
     char cabecalho2[50];
     char cabecalho3[50];
@@ -41,19 +41,18 @@ void openFile(){
     char cabecalho11[50];
     char cabecalho12[50];
 
-    dado *airbnb = (dado*)calloc(1, sizeof(dado));
+    dado *airbnb = (dado*)calloc(n, sizeof(dado));
+
     if(airbnb == NULL){
         cout << "não há memoria suficiente";
     } else {
-        arq = fopen("dados_airbnb.txt", "r");
-        char nome[25], texto[25];
-        int num;
+        FILE *arq = fopen("dados_airbnb.txt", "r");
+
         int i = 0;
 
-        for(int a = 0; a < 11; a++){
+        for(int a = 0; a <= n; a++){
 
             if(a == 0){
-                //printf("%i", a);
                 fscanf
                     ( arq,
                         "%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\n]\n",
@@ -89,34 +88,20 @@ void openFile(){
                 i++;
             }
         }
+
         fclose(arq);
-        cout << "" << cabecalho1
-             << "\t" << cabecalho2
-             << "\t" << cabecalho3
-             << "\t" << cabecalho4
-             << "\t" << cabecalho5
-             << "\t" << cabecalho6
-             << "\t" << cabecalho7
-             << "\t" << cabecalho8
-             << "\t" << cabecalho9
-             << "\t" << cabecalho10
-             << "\t" << cabecalho11
-             << "\t" << cabecalho12 << "\n" ;
 
-             /* printf("%i\t %i\t %s\t %s %s\t %s\t %f\t %f\t %s\t %i\t %f\t %s\n",
-                        airbnb[1].room_id, airbnb[1].host_id,
-                        airbnb[1].room_type, airbnb[0].country, airbnb[0].city, airbnb[0].neighborhood,
-                        airbnb[0].reviews, airbnb[0].overall_satisfaction, airbnb[0].accommodates,
-                        airbnb[0].bedrooms, airbnb[0].price, airbnb[0].property_type
-                );*/
-        }
-
+    }
 
 
 }
 int main()
-{
-    openFile();
+{int n;
+    cout<<"Tamanho do Vetor? ";
+    cin>>n;
+    cout<<endl<<endl;
+
+    openFile(n);
 
     return 0;
 }
