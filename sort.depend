@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1523214460 source:c:\xampp\htdocs\sort\main.cpp
+1523311530 source:c:\xampp\htdocs\sort\main.cpp
 	<iostream>
 	<stdlib.h>
 	<stdio.h>
