@@ -97,8 +97,11 @@ void openFile(int n){
 }
 int main()
 {int n;
+do{
     cout<<"Tamanho do Vetor? ";
     cin>>n;
+}while((n<0) || (n>128001));
+
     cout<<endl<<endl;
 
     openFile(n);
