@@ -18,11 +18,11 @@ struct dado{
     char country[50];
     char city[50];
     char neighborhood[50];
-    float reviews;
-    float overall_satisfaction;
+    char reviews[50];
+    char overall_satisfaction[50];
     char accommodates[50];
-    int bedrooms;
-    float price;
+    char bedrooms[50];
+    char price[50];
     char property_type[50];
 };
 void openFile(){
@@ -50,39 +50,47 @@ void openFile(){
         int num;
         int i = 0;
 
-        for(int a = 0; a < 3; a++){
-            if(a != 0 ){
-                printf("%i %s", a, ") " );
-                fscanf
-                    ( arq,
-                        "%i\t%i\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%f\t%f\t%20[^\t]\t%i\t%f\t%s[^\n]\n",
-                        &airbnb[i].room_id, &airbnb[i].host_id, &airbnb[i].room_type,
-                        &airbnb[i].country, &airbnb[i].city, &airbnb[i].neighborhood,
-                        &airbnb[i].reviews, &airbnb[i].overall_satisfaction, &airbnb[i].accommodates,
-                        &airbnb[i].bedrooms, &airbnb[i].price, &airbnb[i].property_type
-                    );
-                    printf("%i\t%i\t%s\t%s\t%s\t%s\t%f\t%f\t%s\t%i\t%f\t%s\n",
-                        airbnb[i].room_id, airbnb[i].host_id, airbnb[i].room_type,
-                        airbnb[i].country, airbnb[i].city, airbnb[i].neighborhood,
-                        airbnb[i].reviews, airbnb[i].overall_satisfaction, airbnb[i].accommodates,
-                        airbnb[i].bedrooms, airbnb[i].price, airbnb[i].property_type
-                    );
-                    i++;
-            }
+        for(int a = 0; a < 11; a++){
+
             if(a == 0){
                 //printf("%i", a);
                 fscanf
                     ( arq,
-                        "%99[^\t]\t %99[^\t]\t %99[^\t]\t %99[^\t]\t %99[^\t]\t %99[^\t]\t %99[^\t]\t %99[^\t]\t %99[^\t]\t %99[^\t]\t %99[^\t]\t %s[^\t]\n",
+                        "%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\n]\n",
                         &cabecalho1, &cabecalho2, &cabecalho3,
                         &cabecalho4, &cabecalho5, &cabecalho6,
                         &cabecalho7, &cabecalho8, &cabecalho9,
                         &cabecalho10,&cabecalho11, &cabecalho12
                     );
+                    printf(
+                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+                        cabecalho1, cabecalho2, cabecalho3,
+                        cabecalho4, cabecalho5, cabecalho6,
+                        cabecalho7, cabecalho8, cabecalho9,
+                        cabecalho10,cabecalho11, cabecalho12
+                    );
+            }
+            if(a != 0 ){
+                printf("\n %i %s", a, ")\n " );
+                fscanf
+                    ( arq, "%i\t%i\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\n]\n",
+                        //"%d\t%d\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%i%20[^\t]\t%20[^\t]\t%f\t%20[^\n]\n",//%f\t%f\t%f\t%f\t%f\t%20[^\n]\n",
+                        &airbnb[i].room_id, &airbnb[i].host_id, &airbnb[i].room_type,
+                        &airbnb[i].country, &airbnb[i].city, &airbnb[i].neighborhood,
+                        &airbnb[i].reviews, &airbnb[i].overall_satisfaction, &airbnb[i].accommodates,
+                        &airbnb[i].bedrooms, &airbnb[i].price, &airbnb[i].property_type
+                    );
+                printf("%i\t %i\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\n",
+                    airbnb[i].room_id, airbnb[i].host_id, airbnb[i].room_type,
+                    airbnb[i].country, airbnb[i].city, airbnb[i].neighborhood,
+                    airbnb[i].reviews, airbnb[i].overall_satisfaction, airbnb[i].accommodates,
+                    airbnb[i].bedrooms, airbnb[i].price, airbnb[i].property_type);
+
+                i++;
             }
         }
         fclose(arq);
-        /*cout << "" << cabecalho1
+        cout << "" << cabecalho1
              << "\t" << cabecalho2
              << "\t" << cabecalho3
              << "\t" << cabecalho4
@@ -100,7 +108,7 @@ void openFile(){
                         airbnb[1].room_type, airbnb[0].country, airbnb[0].city, airbnb[0].neighborhood,
                         airbnb[0].reviews, airbnb[0].overall_satisfaction, airbnb[0].accommodates,
                         airbnb[0].bedrooms, airbnb[0].price, airbnb[0].property_type
-                    );*/
+                );*/
         }
 
 
