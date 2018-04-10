@@ -2,7 +2,17 @@
 sort.layout
 sort.layout
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+bin/Debug/sort.exe
+=======
+>>>>>>> 25f45492668eab21b027ad3c8a2567de2a6bc26c
 sort.layout
+>>>>>>> f2b675302dcf1a66432499d9540afd0227218d53
+=======
+sort.layout
+>>>>>>> f2b675302dcf1a66432499d9540afd0227218d53
 sort.layout
 =======
 bin/Debug/sort.exe
