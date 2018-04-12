@@ -13,18 +13,10 @@
 	<time.h>
 	<locale.h>
 
-1523496794 source:c:\users\davig\documents\github\sort\main.cpp
+1523500418 source:c:\users\davig\documents\github\sort\main.cpp
 	<iostream>
 	<stdlib.h>
 	<stdio.h>
-	<fstream>
-	<vector>
-	<string>
 	<iostream>
-	<algorithm>
-	<iterator>
-	<sstream>
-	<time.h>
-	<locale.h>
 	<windows.h>
 

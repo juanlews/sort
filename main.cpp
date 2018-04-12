@@ -1,15 +1,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
-#include <fstream>
-#include <vector>
-#include <string>
 #include <iostream>
-#include <algorithm>
-#include <iterator>
-#include <sstream>
-#include <time.h>
-#include <locale.h>
 #include <windows.h>
 double PCFreq = 0.0;
 __int64 CounterStart = 0;
@@ -105,7 +97,25 @@ void selecao(dado *airbnb, int n){
         airbnb[i] = temp;
     }
 }
+/*
+void deivinhoSort(dado *airbnb, int n){
 
+    int i, j, menor;
+    dado temp;
+    for (i = 0; i < n-1; i++){
+        menor = i;
+        for (j = i + 1; j < n; j++){
+            if (airbnb[j].room_id < airbnb[menor].room_id){
+                menor = j;
+                temp = airbnb[menor];
+                airbnb[menor] = airbnb[i];
+                airbnb[i] = temp;
+            }
+        }
+
+    }
+}
+*/
 void merges(dado *airbnb, int l, int m, int r){
 
     int i, j, k;
@@ -113,7 +123,7 @@ void merges(dado *airbnb, int l, int m, int r){
     int n2 =  r - m;
 
     /* create temp arrays */
-    dado L[n1], R[n2];
+    dado *L = (dado *)malloc(n1*sizeof(dado)), *R = (dado *)malloc(n2*sizeof(dado));
 
     /* Copy data to temp arrays L[] and R[] */
     for (i = 0; i < n1; i++)
@@ -295,9 +305,9 @@ int main(){
     dado *v = openFile(n);
 
     do{
-        cout<<"Metodo de ordenacao: 1)Insercao 2) Selecao 3)Bolha 4)MergeSort 5)QuickSort\n";
+        cout<<"Metodo de ordenacao: 1)Insercao 2) Selecao 3)Bolha 4)MergeSort 5)QuickSort 6)DeivinhoSort\n";
         cin>>op;
-    }while((op<1)||(op>5));
+    }while((op<1)||(op>6));
 
         switch(op){
             case 1:
@@ -348,7 +358,7 @@ int main(){
             case 6:
                 cout<<"\n       DEUS ME ACUDE\n";
                 StartCounter();
-                //funcao
+                //deivinhoSort(v, n);
                 tempoEmMilissegundo = GetCounter();
                 cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
                 break;
@@ -357,7 +367,6 @@ int main(){
         }
 
     cout<<endl<<endl;
-    //printDados(v, n); // se quiser verificar se ficou organizado
+    printDados(v, n); // se quiser verificar se ficou organizado
     return 0;
 }
-
