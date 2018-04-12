@@ -241,8 +241,25 @@ dado *openFile(int n){
         cout << "não há memoria suficiente";
     } else {
         //inicia abertura do arquivo em modo leitura
-        FILE *arq = fopen("dados_airbnb.txt", "r");
+        int ordem;
+        FILE *arq;
+        do{
+        cout<<"Ordem arquivo: 1)Crescente 2)Decrescente 3)Aleatorio\n";
+        cin>>ordem;
+        }while((ordem<1)&&(ordem>3));
+        switch(ordem){
+            case 1:
+                arq = fopen("dados_airbnb_crescente.txt", "r");
+            break;
 
+            case 2:
+                arq = fopen("dados_airbnb_decrescente.txt", "r");
+            break;
+
+            case 3:
+                arq = fopen("dados_airbnb.txt", "r");
+            break;
+        }
         int i = 0;
 
         for(int a = 0; a <= n; a++){
@@ -297,7 +314,7 @@ int main(){
     int n, op;
     double tempoEmMilissegundo = 0.0000000;
     do{
-        cout<<"Tamanho do Vetor? ";
+        cout<<"Tamanho do Vetor?\n";
         cin>>n;
     } while ((n<0) || (n>128001));
 
@@ -365,8 +382,24 @@ int main(){
 
 
         }
+/*
+    FILE *crescente= fopen("dados_airbnb_decrescente.txt", "w+");
+        if (!crescente) {
+            perror(strerror(errno)); // inclua os headers  string.h  e  errno.h
+            return EXIT_FAILURE; // inclua stdlib.h
+        }
 
+        for(int i=n; i>=0; i--) {
+            fprintf(crescente, "%i\t %i\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\n",
+                    v[i].room_id, v[i].host_id, v[i].room_type,
+                    v[i].country, v[i].city, v[i].neighborhood,
+                    v[i].reviews, v[i].overall_satisfaction, v[i].accommodates,
+                    v[i].bedrooms, v[i].price, v[i].property_type);
+        }
+
+    fclose(crescente);
+*/
     cout<<endl<<endl;
-    printDados(v, n); // se quiser verificar se ficou organizado
+    //printDados(v, n); // se quiser verificar se ficou organizado
     return 0;
 }
