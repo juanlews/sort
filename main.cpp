@@ -10,6 +10,9 @@
 #include <sstream>
 #include <time.h>
 #include <locale.h>
+#include <windows.h>
+double PCFreq = 0.0;
+__int64 CounterStart = 0;
 
 
 using namespace std;
@@ -28,6 +31,24 @@ struct dado{
     char price[50];
     char property_type[50];
 };
+
+void StartCounter()
+{
+    LARGE_INTEGER li;
+    if(!QueryPerformanceFrequency(&li))
+        printf("QueryPerformanceFrequency Failed.\n");
+    PCFreq = (double)(li.QuadPart) / 1000.0;
+    QueryPerformanceCounter(&li);
+    CounterStart = li.QuadPart;
+}
+
+double GetCounter()
+{
+    LARGE_INTEGER li;
+    QueryPerformanceCounter(&li);
+    return (double)(li.QuadPart - CounterStart) / PCFreq;
+}
+
 void printDados(dado *airbnb, int n){
     for(int i = 0; i < n; i++){
         printf("\n%i\t %i\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\n",
@@ -38,11 +59,23 @@ void printDados(dado *airbnb, int n){
 
     }
 }
+
+void insercao(dado *airbnb, int n){
+ int i, j;
+ dado tmp;
+
+ for(i = 1; i < n; i++)
+ {
+  tmp = airbnb[i];
+  for(j = i-1; ((j >= 0) && (tmp.room_id < airbnb[j].room_id)); j--)
+  {
+   airbnb[j+1] = airbnb[j];
+  }
+  airbnb[j+1] = tmp;
+ }
+}
+
 void bolha(dado *airbnb, int n){
-    /*/Inicia a contagem do tempo
-    clock_t Ticks[2];
-    Ticks[0] = clock();
-    //O código a ter seu tempo de execução medido ficaria neste ponto.*/
     dado temp;
     for (int i = 0; i < n-1; i++){
         for (int j = 0; j < n-i-1; j++){
@@ -54,16 +87,10 @@ void bolha(dado *airbnb, int n){
             }
         }
     }
-    /*Ticks[1] = clock();
-    double Tempo = (Ticks[1] - Ticks[0]) * 1000.0 / CLOCKS_PER_SEC;
-    printf("\nTempo gasto ao ordenar por BubbleSort: %g ms.", Tempo);
-    getchar();*/
 }
-void selecao(dado *airbnb, int n){//SELECAO
-    /*/Inicia a contagem do tempo
-    clock_t Ticks[2];
-    Ticks[0] = clock();
-    //O código a ter seu tempo de execução medido ficaria neste ponto.*/
+
+void selecao(dado *airbnb, int n){
+
     int i, j, menor;
     dado temp;
     for (i = 0; i < n-1; i++){
@@ -77,11 +104,8 @@ void selecao(dado *airbnb, int n){//SELECAO
         airbnb[menor] = airbnb[i];
         airbnb[i] = temp;
     }
-    /*Ticks[1] = clock();
-    double Tempo = (Ticks[1] - Ticks[0]) * 1000.0 / CLOCKS_PER_SEC;
-    printf("\nTempo gasto ao ordenar por SelectionSort: %g ms.", Tempo);
-    getchar();*/
 }
+
 void merges(dado *airbnb, int l, int m, int r){
 
     int i, j, k;
@@ -138,7 +162,7 @@ void merges(dado *airbnb, int l, int m, int r){
 
 /* l is for left index and r is right index of the
    sub-array of arr to be sorted */
-void mergeSort(dado *airbnb, int l, int r, int toTime = 0){
+void mergeSort(dado *airbnb, int l, int r){
 
     if (l < r){
         // Same as (l+r)/2, but avoids overflow for
@@ -146,18 +170,14 @@ void mergeSort(dado *airbnb, int l, int r, int toTime = 0){
         int m = l+(r-l)/2;
 
         // Sort first and second halves
-        mergeSort(airbnb, l, m , 1);
-        mergeSort(airbnb, m+1, r, 1);
+        mergeSort(airbnb, l, m);
+        mergeSort(airbnb, m+1, r);
 
         merges(airbnb, l, m, r);
     }
 }
 
 void quick_sort(dado *airbnb, int left, int right) {
-    /*/Inicia a contagem do tempo
-    clock_t Ticks[2];
-    Ticks[0] = clock();
-    //O código a ter seu tempo de execução medido ficaria neste ponto.*/
     int i, j;
     dado x, y;
 
@@ -187,19 +207,10 @@ void quick_sort(dado *airbnb, int left, int right) {
     if(i < right) {
         quick_sort(airbnb, i, right);
     }
-
-    /*Ticks[1] = clock();
-    double Tempo = (Ticks[1] - Ticks[0]) * 1000.0 / CLOCKS_PER_SEC;
-    printf("\nTempo gasto ao ordenar com QuickSort: %g ms.", Tempo);
-    getchar();*/
 }
+
 dado *openFile(int n){
 
-    /*/Inicia a contagem do tempo
-    clock_t Ticks[2];
-    Ticks[0] = clock();
-    //O código a ter seu tempo de execução medido ficaria neste ponto.
-    */
 
     char cabecalho1[50];
     char cabecalho2[50];
@@ -235,17 +246,18 @@ dado *openFile(int n){
                         &cabecalho7, &cabecalho8, &cabecalho9,
                         &cabecalho10,&cabecalho11, &cabecalho12
                     );
-                    printf(
+                   /* printf(
                         "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
                         cabecalho1, cabecalho2, cabecalho3,
                         cabecalho4, cabecalho5, cabecalho6,
                         cabecalho7, cabecalho8, cabecalho9,
                         cabecalho10,cabecalho11, cabecalho12
-                    );
+
+                    );*/
             }
             //depois da primeira repetição lê os valores e quarda na Struct
             if(a != 0 ){
-                printf("\n %i %s", a, ")\n " );
+                //printf("\n %i %s", a, ")\n " );
                 fscanf
                     ( arq, "%i\t%i\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\n]\n",
                         //"%d\t%d\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%i%20[^\t]\t%20[^\t]\t%f\t%20[^\n]\n",//%f\t%f\t%f\t%f\t%f\t%20[^\n]\n",
@@ -254,41 +266,98 @@ dado *openFile(int n){
                         &airbnb[i].reviews, &airbnb[i].overall_satisfaction, &airbnb[i].accommodates,
                         &airbnb[i].bedrooms, &airbnb[i].price, &airbnb[i].property_type
                     );
-                printf("%i\t %i\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\n",
+              /*  printf("%i\t %i\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\n",
                     airbnb[i].room_id, airbnb[i].host_id, airbnb[i].room_type,
                     airbnb[i].country, airbnb[i].city, airbnb[i].neighborhood,
                     airbnb[i].reviews, airbnb[i].overall_satisfaction, airbnb[i].accommodates,
                     airbnb[i].bedrooms, airbnb[i].price, airbnb[i].property_type);
-
+            */
                 i++;
             }
         }
         fclose(arq);
 
     }
-
-    /*Ticks[1] = clock();
-    double Tempo = (Ticks[1] - Ticks[0]) * 1000.0 / CLOCKS_PER_SEC;
-    printf("\nTempo gasto ao ler o arquivo e atribuir os valores as variáveis: %g ms.", Tempo);
-    getchar();*/
     return airbnb;
 }
 
 int main(){
 
     setlocale(LC_ALL,"");
-    int n;
-
+    int n, op;
+    double tempoEmMilissegundo = 0.0000000;
     do{
         cout<<"Tamanho do Vetor? ";
         cin>>n;
     } while ((n<0) || (n>128001));
 
-    cout<<endl<<endl;
-
+    cout<<endl;
     dado *v = openFile(n);
-    bolha(v, n);
-    printDados(v, n);
+
+    do{
+        cout<<"Metodo de ordenacao: 1)Insercao 2) Selecao 3)Bolha 4)MergeSort 5)QuickSort\n";
+        cin>>op;
+    }while((op<1)||(op>5));
+
+        switch(op){
+            case 1:
+                cout<<"\n       INSERCAO\n";
+                StartCounter();
+                insercao(v, n);
+                tempoEmMilissegundo = GetCounter();
+                cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
+                cout<<endl;
+                break;
+
+            case 2:
+                cout<<"\n       SELECAO\n";
+                StartCounter();
+                selecao(v, n);
+                tempoEmMilissegundo = GetCounter();
+                cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
+                cout<<endl;
+                break;
+
+            case 3:
+                cout<<"\n       BOLHA\n";
+                StartCounter();
+                bolha(v, n);
+                tempoEmMilissegundo = GetCounter();
+                cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
+                cout<<endl;
+                break;
+
+            case 4:
+                cout<<"\n       MERGESORT\n";
+                StartCounter();
+                mergeSort(v, 0, n-1);
+                tempoEmMilissegundo = GetCounter();
+                cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
+                cout<<endl;
+                break;
+
+            case 5:
+                cout<<"\n       QUICKSORT\n";
+                StartCounter();
+                quick_sort(v, 0, n-1);
+                tempoEmMilissegundo = GetCounter();
+                cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
+                cout<<endl;
+                break;
+
+            case 6:
+                cout<<"\n       DEUS ME ACUDE\n";
+                StartCounter();
+                //funcao
+                tempoEmMilissegundo = GetCounter();
+                cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
+                break;
+
+
+        }
+
+    cout<<endl<<endl;
+    //printDados(v, n); // se quiser verificar se ficou organizado
     return 0;
 }
 
