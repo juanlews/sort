@@ -97,25 +97,28 @@ void selecao(dado *airbnb, int n){
         airbnb[i] = temp;
     }
 }
-/*
-void deivinhoSort(dado *airbnb, int n){
 
-    int i, j, menor;
-    dado temp;
-    for (i = 0; i < n-1; i++){
-        menor = i;
-        for (j = i + 1; j < n; j++){
-            if (airbnb[j].room_id < airbnb[menor].room_id){
-                menor = j;
-                temp = airbnb[menor];
-                airbnb[menor] = airbnb[i];
-                airbnb[i] = temp;
+void lala(dado *airbnb, int n)
+{
+    int tam=n;
+    dado aux;
+
+        for (int i=0; i<tam; i++)
+        {
+            for (int j=i+1; j<tam; j++)
+            {
+                if(airbnb[i].room_id > airbnb[j].room_id)
+                {
+                    aux=airbnb[i];
+                    airbnb[i]=airbnb[j];
+                    airbnb[j]=aux;
+                }
+
             }
         }
 
-    }
 }
-*/
+
 void merges(dado *airbnb, int l, int m, int r){
 
     int i, j, k;
@@ -322,7 +325,7 @@ int main(){
     dado *v = openFile(n);
 
     do{
-        cout<<"Metodo de ordenacao: 1)Insercao 2) Selecao 3)Bolha 4)MergeSort 5)QuickSort 6)DeivinhoSort\n";
+        cout<<"Metodo de ordenacao: 1)Insercao 2) Selecao 3)Bolha 4)MergeSort 5)QuickSort 6)LalaSort\n";
         cin>>op;
     }while((op<1)||(op>6));
 
@@ -373,9 +376,9 @@ int main(){
                 break;
 
             case 6:
-                cout<<"\n       DEUS ME ACUDE\n";
+                cout<<"\n       LalaSORT\n";
                 StartCounter();
-                //deivinhoSort(v, n);
+                lala(v, n);
                 tempoEmMilissegundo = GetCounter();
                 cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
                 break;
