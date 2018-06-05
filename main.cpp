@@ -186,8 +186,35 @@ dado falso ={0,0,0,0,0,0,0,0,0,0,0,0};
     }
 cout<<"Registro nao encontrado";
 return falso;
-
 }
+
+
+dado Pesquisa_binaria(dado *v,int n, int chave){
+dado falso ={0,0,0,0,0,0,0,0,0,0,0,0};
+    int inicio = 0, fim = n-1, meio;
+
+
+    while(inicio <= fim){
+
+        meio=(inicio+fim)/2;
+
+        if(chave == v[meio].room_id){
+        cout<<"Registro encontrado!\n";
+            return v[meio];
+        }
+
+        if(chave < v[meio].room_id){
+            fim = meio-1;
+        }
+        else{
+            inicio = meio+1;
+        }
+    }
+
+    return falso;
+}
+
+
 
 
 
@@ -207,16 +234,15 @@ tempoEmMilissegundo = GetCounter();
 
     do{
         cout<<"\t---------> Opcoes disponiveis:\n";
-        cout<<"[1] -> Pesquisar as informações de um quarto, usando o campo room_id como chave, usando uma pesquisa sequencial.\n";
-        cout<<"[2] -> Pesquisar as informações de um quarto, usando o campo room_id como chave, usando uma pesquisa binária.\n";
-        cout<<"[3] -> Pesquisar as informações de um quarto, usando o campo room_id como chave, usando uma árvore binária.\n";
-        cout<<"[4] -> Pesquisar as informações de um quarto, usando o campo room_id como chave, usando uma tabela Hash.\n";
-        cout<<"[5] -> Contabilizar a quantidade de quartos disponíveis para cada uma das cidades. Deve ser exibido o nome de cada cidade e a quantidade de quartos disponíveis..\n";
-        cout<<"[6] -> Pesquisar o quarto mais caro e mais barato de uma determinada cidade, informada pelo usuário.\n";
+        cout<<"[1] -> Pesquisar as informações de um quarto, usando uma pesquisa sequencial.\n";
+        cout<<"[2] -> Pesquisar as informações de um quarto, usando uma pesquisa binária.\n";
+        cout<<"[3] -> Pesquisar as informações de um quarto, usando uma árvore binária.\n";
+        cout<<"[4] -> Pesquisar as informações de um quarto, usando uma tabela Hash.\n";
+        cout<<"[5] -> Contabilizar a quantidade de quartos disponíveis para cada uma das cidades. \n";
+        cout<<"[6] -> Pesquisar o quarto mais caro e mais barato de uma determinada cidade.\n";
         cout<<"[7] -> Sair.\n";
         cout<<"Entrada:  ";
         cin>>op;
-        cout<<endl;
 
             if(op==7){
                 break;
@@ -224,7 +250,7 @@ tempoEmMilissegundo = GetCounter();
 
         switch(op){
             case 1:
-                cout<<"\tPESQUISA SEQUENCIAL:\n";
+                cout<<"\n\tPESQUISA SEQUENCIAL:\n";
                 cout<<"Room_id? ";
                 cin>>chave;
                 v = openFile(128001, 2);
@@ -238,27 +264,36 @@ tempoEmMilissegundo = GetCounter();
                 break;
 
             case 2:
-                cout<<"\n       SELECAO\n";
-
+                cout<<"\n\tPESQUISA BINARIA:\n";
+                cout<<"Room_id? ";
+                cin>>chave;
+                v = openFile(128001, 1);
+                StartCounter();
+                aux=Pesquisa_binaria(v, 128001, chave);
+                tempoEmMilissegundo = GetCounter();
+                    if(aux.room_id!=0){
+                        Imprimir_pesquisa(aux);
+                    }
+                cout<<"\nTempo para realizar a pesquisa (MS): "<<tempoEmMilissegundo;
                 break;
 
             case 3:
-                cout<<"\n       BOLHA\n";
+                cout<<"\n\tPESQUISA EM ARVORE BINARIA\n";
 
                 break;
 
             case 4:
-                cout<<"\n       MERGESORT\n";
+                cout<<"\n\tPESQUISA EM TABELA HASH\n";
 
                 break;
 
             case 5:
-                cout<<"\n       QUICKSORT\n";
+                cout<<"\n\tQUANTIDADE CARROS DISPONIVEIS EM UMA CIDADE\n";
 
                 break;
 
             case 6:
-                cout<<"\n       LalaSORT\n";
+                cout<<"\n\tQUARTO MAIS CARO E MAIS BARATO DE DETERMINADA CIDADE\n";
 
                 break;
 
