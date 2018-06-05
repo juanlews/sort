@@ -41,7 +41,7 @@ double GetCounter()
     return (double)(li.QuadPart - CounterStart) / PCFreq;
 }
 
-//===============================================
+//===============================================ESTRUTURA ARVORE
 struct No{
     dado dado;
     No *pai, *esq, *dir;
@@ -170,36 +170,17 @@ dado *openFile(int n, int op){
                         &cabecalho7, &cabecalho8, &cabecalho9,
                         &cabecalho10,&cabecalho11, &cabecalho12
                     );
-                   /* printf(
-                        "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
-                        cabecalho1, cabecalho2, cabecalho3,
-                        cabecalho4, cabecalho5, cabecalho6,
-                        cabecalho7, cabecalho8, cabecalho9,
-                        cabecalho10,cabecalho11, cabecalho12
-
-                    );*/
             }
             //depois da primeira repetição lê os valores e quarda na Struct
             if(a != 0 ){
-                //printf("\n %i %s", a, ")\n " );
                 fscanf
-<<<<<<< HEAD
                     ( arq, "%i\t%i\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%i.0\t%[^\n]\n",
-=======
-                    ( arq, "%i\t%i\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%i\t%[^\n]\n",
->>>>>>> 9d74a0a89aaab6b30469966be3d1445fc75bdcc0
-                        //"%d\t%d\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%i%20[^\t]\t%20[^\t]\t%f\t%20[^\n]\n",//%f\t%f\t%f\t%f\t%f\t%20[^\n]\n",
                         &airbnb[i].room_id, &airbnb[i].host_id, &airbnb[i].room_type,
                         &airbnb[i].country, &airbnb[i].city, &airbnb[i].neighborhood,
                         &airbnb[i].reviews, &airbnb[i].overall_satisfaction, &airbnb[i].accommodates,
                         &airbnb[i].bedrooms, &airbnb[i].price, &airbnb[i].property_type
                     );
-              /*  printf("%i\t %i\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\n",
-                    airbnb[i].room_id, airbnb[i].host_id, airbnb[i].room_type,
-                    airbnb[i].country, airbnb[i].city, airbnb[i].neighborhood,
-                    airbnb[i].reviews, airbnb[i].overall_satisfaction, airbnb[i].accommodates,
-                    airbnb[i].bedrooms, airbnb[i].price, airbnb[i].property_type);
-            */
+
                 i++;
             }
         }
@@ -292,23 +273,13 @@ dado falso ={0,0,0,0,0,0,0,0,0,0,0,0};
 
 int main(){
 
-/*      Modelo funcoes Tempo
-StartCounter();
-insercao(v, n);
-tempoEmMilissegundo = GetCounter();
-*/
+setlocale(LC_ALL,"");
 
-    setlocale(LC_ALL,"");
-<<<<<<< HEAD
     ArvBin *arvore = (ArvBin*)malloc(sizeof(ArvBin));
-    int  op=0, chave;
-=======
     int  op=0, chave,ma=0, me;
     char chavosa[50];
->>>>>>> 9d74a0a89aaab6b30469966be3d1445fc75bdcc0
     dado *v, aux;
     double tempoEmMilissegundo = 0.0000000;
-    //dado *v = openFile(128001);
 
     do{
         cout<<"\t---------> Opcoes disponiveis:\n";
@@ -402,8 +373,7 @@ tempoEmMilissegundo = GetCounter();
         }
     }while((op<1)||(op>7));
 
-    //cout<<endl<<endl;
-    //printDados(v, n); // se quiser verificar se ficou organizado
+    free(arvore);
     free(v);
     return 0;
 }
