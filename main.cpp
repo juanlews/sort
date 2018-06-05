@@ -52,144 +52,6 @@ void printDados(dado *airbnb, int n){
     }
 }
 
-void insercao(dado *airbnb, int n){
- int i, j;
- dado tmp;
-
- for(i = 1; i < n; i++)
- {
-  tmp = airbnb[i];
-  for(j = i-1; ((j >= 0) && (tmp.room_id < airbnb[j].room_id)); j--)
-  {
-   airbnb[j+1] = airbnb[j];
-  }
-  airbnb[j+1] = tmp;
- }
-}
-
-void bolha(dado *airbnb, int n){
-    dado temp;
-    for (int i = 0; i < n-1; i++){
-        for (int j = 0; j < n-i-1; j++){
-
-            if (airbnb[j].room_id > airbnb[j+1].room_id){
-                temp = airbnb[j];
-                airbnb[j] = airbnb[j+1];
-                airbnb[j+1] = temp;
-            }
-        }
-    }
-}
-
-void selecao(dado *airbnb, int n){
-
-    int i, j, menor;
-    dado temp;
-    for (i = 0; i < n-1; i++){
-        menor = i;
-        for (j = i + 1; j < n; j++){
-            if (airbnb[j].room_id < airbnb[menor].room_id){
-                menor = j;
-            }
-        }
-        temp = airbnb[menor];
-        airbnb[menor] = airbnb[i];
-        airbnb[i] = temp;
-    }
-}
-
-void lala(dado *airbnb, int n)
-{
-    int tam=n;
-    dado aux;
-
-        for (int i=0; i<tam; i++)
-        {
-            for (int j=i+1; j<tam; j++)
-            {
-                if(airbnb[i].room_id > airbnb[j].room_id)
-                {
-                    aux=airbnb[i];
-                    airbnb[i]=airbnb[j];
-                    airbnb[j]=aux;
-                }
-
-            }
-        }
-
-}
-
-void merges(dado *airbnb, int l, int m, int r){
-
-    int i, j, k;
-    int n1 = m - l + 1;
-    int n2 =  r - m;
-
-    /* create temp arrays */
-    dado *L = (dado *)malloc(n1*sizeof(dado)), *R = (dado *)malloc(n2*sizeof(dado));
-
-    /* Copy data to temp arrays L[] and R[] */
-    for (i = 0; i < n1; i++)
-        L[i] = airbnb[l + i];
-    for (j = 0; j < n2; j++)
-        R[j] = airbnb[m + 1+ j];
-
-    /* Merge the temp arrays back into arr[l..r]*/
-    i = 0; // Initial index of first subarray
-    j = 0; // Initial index of second subarray
-    k = l; // Initial index of merged subarray
-    while (i < n1 && j < n2)
-    {
-        if (L[i].room_id <= R[j].room_id)
-        {
-            airbnb[k] = L[i];
-            i++;
-        }
-        else
-        {
-            airbnb[k] = R[j];
-            j++;
-        }
-        k++;
-    }
-
-    /* Copy the remaining elements of L[], if there
-       are any */
-    while (i < n1)
-    {
-        airbnb[k] = L[i];
-        i++;
-        k++;
-    }
-
-    /* Copy the remaining elements of R[], if there
-       are any */
-    while (j < n2)
-    {
-        airbnb[k] = R[j];
-        j++;
-        k++;
-    }
-
-}
-
-/* l is for left index and r is right index of the
-   sub-array of arr to be sorted */
-void mergeSort(dado *airbnb, int l, int r){
-
-    if (l < r){
-        // Same as (l+r)/2, but avoids overflow for
-        // large l and h
-        int m = l+(r-l)/2;
-
-        // Sort first and second halves
-        mergeSort(airbnb, l, m);
-        mergeSort(airbnb, m+1, r);
-
-        merges(airbnb, l, m, r);
-    }
-}
-
 void quick_sort(dado *airbnb, int left, int right) {
     int i, j;
     dado x, y;
@@ -222,7 +84,7 @@ void quick_sort(dado *airbnb, int left, int right) {
     }
 }
 
-dado *openFile(int n){
+dado *openFile(int n, int op){
 
 
     char cabecalho1[50];
@@ -244,22 +106,13 @@ dado *openFile(int n){
         cout << "não há memoria suficiente";
     } else {
         //inicia abertura do arquivo em modo leitura
-        int ordem;
         FILE *arq;
-        do{
-        cout<<"Ordem arquivo: 1)Crescente 2)Decrescente 3)Aleatorio\n";
-        cin>>ordem;
-        }while((ordem<1)&&(ordem>3));
-        switch(ordem){
+        switch(op){
             case 1:
                 arq = fopen("dados_airbnb_crescente.txt", "r");
             break;
 
             case 2:
-                arq = fopen("dados_airbnb_decrescente.txt", "r");
-            break;
-
-            case 3:
                 arq = fopen("dados_airbnb.txt", "r");
             break;
         }
@@ -311,98 +164,109 @@ dado *openFile(int n){
     return airbnb;
 }
 
+//----------------------------------------------------------- FUNCOES DE PESQUISA
+
+void Imprimir_pesquisa(dado airbnb){
+printf("Dados da pesquisa:\nRoom_id: %i\nHost_id: %i\nRoom_type: %s\nCountry: %s\nCity: %s\nNeighborhood: %s\nReviews: %s\nOverall_satisfaction: %s\nAccommodates: %s\nBedrooms: %s\nPrice: %s\nProperty_type: %s\t\n",
+                    airbnb.room_id, airbnb.host_id, airbnb.room_type,
+                    airbnb.country, airbnb.city, airbnb.neighborhood,
+                    airbnb.reviews, airbnb.overall_satisfaction, airbnb.accommodates,
+                    airbnb.bedrooms, airbnb.price, airbnb.property_type);
+
+    }
+
+
+dado Pesquisa_sequencial(dado *v, int chave){
+dado falso ={0,0,0,0,0,0,0,0,0,0,0,0};
+    for(int i=0; i<128001; i++){
+        if(v[i].room_id==chave){
+            cout<<"Registro encontrado!\n";
+            return v[i];
+        }
+    }
+cout<<"Registro nao encontrado";
+return falso;
+
+}
+
+
+
 int main(){
 
+/*      Modelo funcoes Tempo
+StartCounter();
+insercao(v, n);
+tempoEmMilissegundo = GetCounter();
+*/
+
     setlocale(LC_ALL,"");
-    int n, op;
+    int  op=0, chave;
+    dado *v, aux;
     double tempoEmMilissegundo = 0.0000000;
-    do{
-        cout<<"Tamanho do Vetor?\n";
-        cin>>n;
-    } while ((n<0) || (n>128001));
-
-    cout<<endl;
-    dado *v = openFile(n);
+    //dado *v = openFile(128001);
 
     do{
-        cout<<"Metodo de ordenacao: 1)Insercao 2) Selecao 3)Bolha 4)MergeSort 5)QuickSort 6)LalaSort\n";
+        cout<<"\t---------> Opcoes disponiveis:\n";
+        cout<<"[1] -> Pesquisar as informações de um quarto, usando o campo room_id como chave, usando uma pesquisa sequencial.\n";
+        cout<<"[2] -> Pesquisar as informações de um quarto, usando o campo room_id como chave, usando uma pesquisa binária.\n";
+        cout<<"[3] -> Pesquisar as informações de um quarto, usando o campo room_id como chave, usando uma árvore binária.\n";
+        cout<<"[4] -> Pesquisar as informações de um quarto, usando o campo room_id como chave, usando uma tabela Hash.\n";
+        cout<<"[5] -> Contabilizar a quantidade de quartos disponíveis para cada uma das cidades. Deve ser exibido o nome de cada cidade e a quantidade de quartos disponíveis..\n";
+        cout<<"[6] -> Pesquisar o quarto mais caro e mais barato de uma determinada cidade, informada pelo usuário.\n";
+        cout<<"[7] -> Sair.\n";
+        cout<<"Entrada:  ";
         cin>>op;
-    }while((op<1)||(op>6));
+        cout<<endl;
+
+            if(op==7){
+                break;
+            }
 
         switch(op){
             case 1:
-                cout<<"\n       INSERCAO\n";
+                cout<<"\tPESQUISA SEQUENCIAL:\n";
+                cout<<"Room_id? ";
+                cin>>chave;
+                v = openFile(128001, 2);
                 StartCounter();
-                insercao(v, n);
+                aux=Pesquisa_sequencial(v, chave);
                 tempoEmMilissegundo = GetCounter();
-                cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
-                cout<<endl;
+                    if(aux.room_id!=0){
+                        Imprimir_pesquisa(aux);
+                    }
+                cout<<"\nTempo para realizar a pesquisa (MS): "<<tempoEmMilissegundo;
                 break;
 
             case 2:
                 cout<<"\n       SELECAO\n";
-                StartCounter();
-                selecao(v, n);
-                tempoEmMilissegundo = GetCounter();
-                cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
-                cout<<endl;
+
                 break;
 
             case 3:
                 cout<<"\n       BOLHA\n";
-                StartCounter();
-                bolha(v, n);
-                tempoEmMilissegundo = GetCounter();
-                cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
-                cout<<endl;
+
                 break;
 
             case 4:
                 cout<<"\n       MERGESORT\n";
-                StartCounter();
-                mergeSort(v, 0, n-1);
-                tempoEmMilissegundo = GetCounter();
-                cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
-                cout<<endl;
+
                 break;
 
             case 5:
                 cout<<"\n       QUICKSORT\n";
-                StartCounter();
-                quick_sort(v, 0, n-1);
-                tempoEmMilissegundo = GetCounter();
-                cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
-                cout<<endl;
+
                 break;
 
             case 6:
                 cout<<"\n       LalaSORT\n";
-                StartCounter();
-                lala(v, n);
-                tempoEmMilissegundo = GetCounter();
-                cout<<"\nTempo para ordenacao ="<<tempoEmMilissegundo<<" ms";
+
                 break;
 
-
         }
-/*
-    FILE *crescente= fopen("dados_airbnb_decrescente.txt", "w+");
-        if (!crescente) {
-            perror(strerror(errno)); // inclua os headers  string.h  e  errno.h
-            return EXIT_FAILURE; // inclua stdlib.h
-        }
+    }while((op<1)||(op>7));
 
-        for(int i=n; i>=0; i--) {
-            fprintf(crescente, "%i\t %i\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\n",
-                    v[i].room_id, v[i].host_id, v[i].room_type,
-                    v[i].country, v[i].city, v[i].neighborhood,
-                    v[i].reviews, v[i].overall_satisfaction, v[i].accommodates,
-                    v[i].bedrooms, v[i].price, v[i].property_type);
-        }
-
-    fclose(crescente);
-*/
-    cout<<endl<<endl;
+    //cout<<endl<<endl;
     //printDados(v, n); // se quiser verificar se ficou organizado
+    free(v);
     return 0;
 }
