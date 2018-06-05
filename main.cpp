@@ -20,7 +20,7 @@ struct dado{
     char overall_satisfaction[50];
     char accommodates[50];
     char bedrooms[50];
-    char price[50];
+    int price;
     char property_type[50];
 };
 
@@ -41,48 +41,89 @@ double GetCounter()
     return (double)(li.QuadPart - CounterStart) / PCFreq;
 }
 
-void printDados(dado *airbnb, int n){
-    for(int i = 0; i < n; i++){
-        printf("\n%i\t %i\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\t %s\n",
-                    airbnb[i].room_id, airbnb[i].host_id, airbnb[i].room_type,
-                    airbnb[i].country, airbnb[i].city, airbnb[i].neighborhood,
-                    airbnb[i].reviews, airbnb[i].overall_satisfaction, airbnb[i].accommodates,
-                    airbnb[i].bedrooms, airbnb[i].price, airbnb[i].property_type);
+//===============================================
+struct No{
+    dado dado;
+    No *pai, *esq, *dir;
+};
 
+struct ArvBin{
+    No *raiz;
+    int tam;
+};
+
+void Inicializa(ArvBin *arvore){
+    arvore->raiz = NULL;
+    arvore->tam = 0;
+}
+
+bool Insere(ArvBin *arvore, dado dado){
+
+    No *temp = (No*)malloc(sizeof(No));
+    temp->dado = dado;
+    temp->pai = temp->esq = temp->dir = NULL;
+
+    if(arvore->raiz == NULL){
+        arvore->raiz = temp;
+        arvore->tam++;
+    }else{
+
+        No *raiz = arvore->raiz;
+
+        while(raiz!=NULL){
+
+            if(dado.room_id < raiz->dado.room_id){
+                if(raiz->esq == NULL){
+                    raiz->esq = temp;
+                    temp->pai = raiz;
+                    arvore->tam++;
+                    return true;
+                }else
+                    raiz = raiz->esq;
+            }
+            else if(dado.room_id > raiz->dado.room_id){
+                if(raiz->dir == NULL){
+                    raiz->dir = temp;
+                    temp->pai = raiz;
+                    arvore->tam++;
+                    return true;
+                }else
+                    raiz = raiz->dir;
+            }
+            else{
+                free(temp);
+                return false;
+            }
+        }
     }
 }
 
-void quick_sort(dado *airbnb, int left, int right) {
-    int i, j;
-    dado x, y;
-
-    i = left;
-    j = right;
-    x = airbnb[(left + right) / 2];
-
-    while(i <= j) {
-        while(airbnb[i].room_id < x.room_id && i < right) {
-            i++;
-        }
-        while(airbnb[j].room_id > x.room_id && j > left) {
-            j--;
-        }
-        if(i <= j) {
-            y = airbnb[i];
-            airbnb[i] = airbnb[j];
-            airbnb[j] = y;
-            i++;
-            j--;
-        }
-    }
-
-    if(j > left) {
-        quick_sort(airbnb, left, j);
-    }
-    if(i < right) {
-        quick_sort(airbnb, i, right);
+void Imprimir_Arvore(No *no){
+    if(no != NULL){
+        printf("%Room_id: %i\n", no->dado.room_id);
+        Imprimir_Arvore(no->esq);
+        Imprimir_Arvore(no->dir);
     }
 }
+
+dado Pesquisar(ArvBin *arvore, int chave){
+dado falso ={0,0,0,0,0,0,0,0,0,0,0,0};
+    No *temp = arvore->raiz;
+    while(temp!=NULL){
+        if(temp->dado.room_id == chave){
+            return temp->dado;
+        }else{
+
+            if(chave < temp->dado.room_id)
+                temp = temp->esq;
+            else
+                temp = temp->dir;
+        }
+    }
+    return falso;
+}
+
+//===============================================
 
 dado *openFile(int n, int op){
 
@@ -142,7 +183,7 @@ dado *openFile(int n, int op){
             if(a != 0 ){
                 //printf("\n %i %s", a, ")\n " );
                 fscanf
-                    ( arq, "%i\t%i\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\n]\n",
+                    ( arq, "%i\t%i\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%i.0\t%[^\n]\n",
                         //"%d\t%d\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%i%20[^\t]\t%20[^\t]\t%f\t%20[^\n]\n",//%f\t%f\t%f\t%f\t%f\t%20[^\n]\n",
                         &airbnb[i].room_id, &airbnb[i].host_id, &airbnb[i].room_type,
                         &airbnb[i].country, &airbnb[i].city, &airbnb[i].neighborhood,
@@ -167,13 +208,13 @@ dado *openFile(int n, int op){
 //----------------------------------------------------------- FUNCOES DE PESQUISA
 
 void Imprimir_pesquisa(dado airbnb){
-printf("Dados da pesquisa:\nRoom_id: %i\nHost_id: %i\nRoom_type: %s\nCountry: %s\nCity: %s\nNeighborhood: %s\nReviews: %s\nOverall_satisfaction: %s\nAccommodates: %s\nBedrooms: %s\nPrice: %s\nProperty_type: %s\t\n",
+printf("Dados da pesquisa:\nRoom_id: %i\nHost_id: %i\nRoom_type: %s\nCountry: %s\nCity: %s\nNeighborhood: %s\nReviews: %s\nOverall_satisfaction: %s\nAccommodates: %s\nBedrooms: %s\nPrice: %i\nProperty_type: %s\t\n",
                     airbnb.room_id, airbnb.host_id, airbnb.room_type,
                     airbnb.country, airbnb.city, airbnb.neighborhood,
                     airbnb.reviews, airbnb.overall_satisfaction, airbnb.accommodates,
                     airbnb.bedrooms, airbnb.price, airbnb.property_type);
 
-    }
+}
 
 
 dado Pesquisa_sequencial(dado *v, int chave){
@@ -227,6 +268,7 @@ tempoEmMilissegundo = GetCounter();
 */
 
     setlocale(LC_ALL,"");
+    ArvBin *arvore = (ArvBin*)malloc(sizeof(ArvBin));
     int  op=0, chave;
     dado *v, aux;
     double tempoEmMilissegundo = 0.0000000;
@@ -279,6 +321,20 @@ tempoEmMilissegundo = GetCounter();
 
             case 3:
                 cout<<"\n\tPESQUISA EM ARVORE BINARIA\n";
+                cout<<"Room_id? ";
+                cin>>chave;
+                v = openFile(128001, 2);
+                    for(int i=0; i<128001; i++){
+                        Insere(arvore, v[i]);
+                    }
+                //Imprimir_Arvore(arvore->raiz);
+                StartCounter();
+                aux=Pesquisar(arvore, chave);
+                tempoEmMilissegundo = GetCounter();
+                    if(aux.room_id!=0){
+                        Imprimir_pesquisa(aux);
+                    }
+                cout<<"\nTempo para realizar a pesquisa (MS): "<<tempoEmMilissegundo;
 
                 break;
 
