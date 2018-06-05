@@ -20,7 +20,7 @@ struct dado{
     char overall_satisfaction[50];
     char accommodates[50];
     char bedrooms[50];
-    char price[50];
+    int price;
     char property_type[50];
 };
 
@@ -142,7 +142,7 @@ dado *openFile(int n, int op){
             if(a != 0 ){
                 //printf("\n %i %s", a, ")\n " );
                 fscanf
-                    ( arq, "%i\t%i\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\n]\n",
+                    ( arq, "%i\t%i\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%[^\t]\t%i\t%[^\n]\n",
                         //"%d\t%d\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%20[^\t]\t%i%20[^\t]\t%20[^\t]\t%f\t%20[^\n]\n",//%f\t%f\t%f\t%f\t%f\t%20[^\n]\n",
                         &airbnb[i].room_id, &airbnb[i].host_id, &airbnb[i].room_type,
                         &airbnb[i].country, &airbnb[i].city, &airbnb[i].neighborhood,
@@ -167,7 +167,7 @@ dado *openFile(int n, int op){
 //----------------------------------------------------------- FUNCOES DE PESQUISA
 
 void Imprimir_pesquisa(dado airbnb){
-printf("Dados da pesquisa:\nRoom_id: %i\nHost_id: %i\nRoom_type: %s\nCountry: %s\nCity: %s\nNeighborhood: %s\nReviews: %s\nOverall_satisfaction: %s\nAccommodates: %s\nBedrooms: %s\nPrice: %s\nProperty_type: %s\t\n",
+printf("Dados da pesquisa:\nRoom_id: %i\nHost_id: %i\nRoom_type: %s\nCountry: %s\nCity: %s\nNeighborhood: %s\nReviews: %s\nOverall_satisfaction: %s\nAccommodates: %s\nBedrooms: %s\nPrice: %i\nProperty_type: %s\t\n",
                     airbnb.room_id, airbnb.host_id, airbnb.room_type,
                     airbnb.country, airbnb.city, airbnb.neighborhood,
                     airbnb.reviews, airbnb.overall_satisfaction, airbnb.accommodates,
@@ -186,6 +186,33 @@ dado falso ={0,0,0,0,0,0,0,0,0,0,0,0};
     }
 cout<<"Registro nao encontrado";
 return falso;
+}
+
+int Pesquisa_sequencial_cidade(dado *v, char *chave, int& maior){
+int cont=0;
+int ma=0;
+int me=0;
+
+    for(int i=0; i<128001; i++){
+
+        if(strcmp(v[i].city,chave)==0){
+
+            if (cont==0){
+                ma=v[i].price;
+                me=v[i].price;
+                cont++;
+            }
+
+            if(ma<v[i].price)
+                ma=v[i].price;
+
+            if(me>v[i].price)
+                me=v[i].price;
+        }
+    }
+
+maior=ma;
+return me;
 }
 
 
@@ -227,7 +254,8 @@ tempoEmMilissegundo = GetCounter();
 */
 
     setlocale(LC_ALL,"");
-    int  op=0, chave;
+    int  op=0, chave,ma=0, me;
+    char chavosa[50];
     dado *v, aux;
     double tempoEmMilissegundo = 0.0000000;
     //dado *v = openFile(128001);
@@ -293,7 +321,17 @@ tempoEmMilissegundo = GetCounter();
                 break;
 
             case 6:
+
                 cout<<"\n\tQUARTO MAIS CARO E MAIS BARATO DE DETERMINADA CIDADE\n";
+                cout<<"Cidade?\n-> ";
+                cin.ignore();
+                gets(chavosa);
+                v = openFile(128001,2);
+                StartCounter();
+                me=Pesquisa_sequencial_cidade(v,chavosa,ma);
+                tempoEmMilissegundo = GetCounter();
+                cout<<"Mais Caro  = "<<ma<<endl
+                    <<"Mais Barato= "<<me<<endl;
 
                 break;
 
