@@ -267,9 +267,27 @@ dado falso ={0,0,0,0,0,0,0,0,0,0,0,0};
     return falso;
 }
 
-
-
-
+struct celula_cidade{
+    string nome;
+    int repeticao;
+    celula_cidade * prox;
+};
+struct lista_de_cidades{
+    celula_cidade * ultimo, * primeiro;
+    int tam;
+};
+void inicializa_lista_cidade(lista_de_cidades * l){
+    l->primeiro = NULL;
+    l->ultimo = l->primeiro;
+    l->tam = 0;
+}
+dado Contador_de_cidades(dado *v, lista_de_cidades * l, int n){
+    celula_cidade * aux = (celula_cidade*) malloc(sizeof(celula_cidade));
+    aux = l->primeiro->prox;
+    for(int i = 0; i < n; i++){
+        cout << v[i].city;
+    }
+}
 
 int main(){
 
