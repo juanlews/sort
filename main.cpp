@@ -291,10 +291,8 @@ void imprime_cidades(lista_de_cidades * l){
     aux = l->primeiro->prox;
     while(aux != NULL){
         printf("%s: %i quartos \n", aux->nome, aux->repeticao);
-
         aux = aux->prox;
     }
-    cout << "\n";
 }
 
 void insere_cidade(lista_de_cidades * l, char nome[50] ){
@@ -316,9 +314,6 @@ void insere_cidade(lista_de_cidades * l, char nome[50] ){
     l->ultimo->prox = aux;
     l->ultimo = aux;
     l->tam++;
-    cout << endl;
-
-    //printf("\n %s %i %i quartos",aux->nome , aux->repeticao, l->tam);
     return ;
 
 }
@@ -418,7 +413,7 @@ setlocale(LC_ALL,"");
                 break;
 
             case 5:
-                cout<<"\n\tQUANTIDADE CARROS DISPONIVEIS EM UMA CIDADE\n";
+                cout<<"\n\t QUANTIDADE QUARTOS DISPONIVEIS EM UMA CIDADE\n";
                 v = openFile(128001, 1);
                 Contador_de_cidades(v, cidades, 128000);
                 break;
