@@ -268,30 +268,82 @@ dado falso ={0,0,0,0,0,0,0,0,0,0,0,0};
 }
 
 struct celula_cidade{
-    string nome;
+    char nome[50];
     int repeticao;
     celula_cidade * prox;
 };
+
 struct lista_de_cidades{
     celula_cidade * ultimo, * primeiro;
     int tam;
 };
+
 void inicializa_lista_cidade(lista_de_cidades * l){
-    l->primeiro = NULL;
+    l->primeiro = (celula_cidade *)malloc(sizeof(celula_cidade));
+    l->primeiro->prox = NULL;
     l->ultimo = l->primeiro;
     l->tam = 0;
 }
-dado Contador_de_cidades(dado *v, lista_de_cidades * l, int n){
+
+void imprime_cidades(lista_de_cidades * l){
     celula_cidade * aux = (celula_cidade*) malloc(sizeof(celula_cidade));
+    cout << "\n LISTA DE CIDADES \n";
     aux = l->primeiro->prox;
-    for(int i = 0; i < n; i++){
-        cout << v[i].city;
+    while(aux != NULL){
+        printf("%s: %i quartos \n", aux->nome, aux->repeticao);
+
+        aux = aux->prox;
     }
+    cout << "\n";
 }
+
+void insere_cidade(lista_de_cidades * l, char nome[50] ){
+    celula_cidade * aux = (celula_cidade*) malloc(sizeof(celula_cidade));
+    celula_cidade * toFind = (celula_cidade*) malloc(sizeof(celula_cidade));
+    if(l->tam > 0){
+        for(toFind = l->primeiro->prox; toFind != NULL; toFind = toFind->prox){
+
+            if(strcmp(toFind->nome, nome) == 0){
+                toFind->repeticao++;
+                return ;
+            }
+        }
+    }
+
+    strcpy(aux->nome, nome);
+    aux->repeticao = 1;
+    aux->prox=NULL;
+    l->ultimo->prox = aux;
+    l->ultimo = aux;
+    l->tam++;
+    cout << endl;
+
+    //printf("\n %s %i %i quartos",aux->nome , aux->repeticao, l->tam);
+    return ;
+
+}
+
+void Contador_de_cidades(dado *v, lista_de_cidades * l, int n){
+    //celula_cidade * aux = (celula_cidade*) malloc(sizeof(celula_cidade));
+    char nome[50];
+    for(int i = 0; i < n; i++){
+        strcpy(nome, v[i].city);
+        insere_cidade(l, nome);
+
+    }
+    imprime_cidades(l);
+
+}
+
+
+
 
 int main(){
 
 setlocale(LC_ALL,"");
+
+    lista_de_cidades * cidades = (lista_de_cidades*) malloc(sizeof(lista_de_cidades));
+    inicializa_lista_cidade(cidades);
 
     ArvBin *arvore = (ArvBin*)malloc(sizeof(ArvBin));
     int  op=0, chave,ma=0, me;
@@ -370,7 +422,8 @@ setlocale(LC_ALL,"");
 
             case 5:
                 cout<<"\n\tQUANTIDADE CARROS DISPONIVEIS EM UMA CIDADE\n";
-
+                v = openFile(128001, 1);
+                Contador_de_cidades(v, cidades, 128000);
                 break;
 
             case 6:
