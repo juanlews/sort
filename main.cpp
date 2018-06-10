@@ -335,9 +335,6 @@ void Contador_de_cidades(dado *v, lista_de_cidades * l, int n){
 
 }
 
-
-
-
 int main(){
 
 setlocale(LC_ALL,"");
