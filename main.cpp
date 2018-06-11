@@ -330,6 +330,149 @@ void Contador_de_cidades(dado *v, lista_de_cidades * l, int n){
 
 }
 
+//-----------------------------------------------------PROCEDIMENTOS PARA HASH
+
+struct CelulaH{
+    int dado;
+    CelulaH *prox;
+};
+
+struct ListaH{
+    CelulaH *inicio, *fim;
+    int tam;
+};
+
+
+void InicializarH(ListaH *lista){
+
+    lista->inicio = (CelulaH*) malloc(sizeof(CelulaH));
+    lista->inicio->prox = NULL;
+
+    lista->fim = lista->inicio;
+
+    lista->tam = 0;
+}
+
+
+bool VaziaH(ListaH *lista){
+    return lista->inicio == lista->fim;
+}
+
+
+void InserirH(ListaH *lista, int dado){
+
+
+    CelulaH *temp = (CelulaH*) malloc(sizeof(CelulaH));
+    temp->dado = dado;
+    temp->prox = NULL;
+
+    lista->fim->prox = temp;
+    lista->fim = temp;
+
+
+    lista->tam++;
+}
+
+
+int RemoverH(ListaH *lista, int pos){
+
+
+    if(pos < 1 || pos > lista->tam)
+        return -1;
+
+
+    CelulaH *CelAnt = lista->inicio;
+
+
+    for(int i=0; i<pos-1; i++) CelAnt=CelAnt->prox;
+
+
+    CelulaH *temp = CelAnt->prox;
+
+
+    CelAnt->prox = temp->prox;
+
+
+    int dado = temp->dado;
+
+    free(temp);
+
+    lista->tam--;
+
+
+    return dado;
+}
+
+
+void ImprimirH(ListaH *lista){
+    for(CelulaH *temp = lista->inicio->prox; temp!=NULL; temp=temp->prox){
+        printf("%i ", temp->dado);
+    }
+    printf("\n");
+}
+
+
+int TamanhoH(ListaH *lista){
+    return lista->tam;
+}
+
+
+void FinalizarH(ListaH *lista){
+
+    while(!VaziaH(lista))
+        RemoverH(lista,1);
+
+
+    free(lista->inicio);
+}
+
+
+int PesquisarH(ListaH *lista, int X){
+    for(CelulaH *temp = lista->inicio->prox; temp!=NULL; temp=temp->prox){
+        if(temp->dado == X)
+            return X;
+    }
+    return -1;
+}
+
+int FuncaoHash(int X, int N){
+    return X % N;
+}
+
+void InicializarHash(ListaH *tabela[], int N){
+
+    for(int i=0; i<N; i++){
+       tabela[i] = (ListaH*)malloc(sizeof(ListaH));
+       InicializarH(tabela[i]);
+    }
+}
+
+void InserirHash(ListaH *tabela[], int N, int X){
+
+    int pos = FuncaoHash(X,N);
+    InserirH(tabela[pos], X);
+
+}
+
+int PesquisarHash(ListaH *tabela[], int N, int X){
+
+    int pos = FuncaoHash(X,N);
+
+    int consulta = PesquisarH(tabela[pos], X);
+
+    if(consulta != -1)
+        return pos;
+
+    return -1;
+
+}
+
+/*void ArquivoToHash(Lista *tabela[],dado *v){
+    for ( int i=0; i<128001; i++){
+        InserirHash(*tabela[],128001,i);
+    }
+*/
+
 int main(){
 
 setlocale(LC_ALL,"");
@@ -337,8 +480,12 @@ setlocale(LC_ALL,"");
     lista_de_cidades * cidades = (lista_de_cidades*) malloc(sizeof(lista_de_cidades));
     inicializa_lista_cidade(cidades);
 
+    int tam=128001;
+    ListaH **TabelaHash = (ListaH **)calloc(tam,sizeof(ListaH *));
+    InicializarHash(TabelaHash, tam);
+
     ArvBin *arvore = (ArvBin*)malloc(sizeof(ArvBin));
-    int  op=0, chave,ma=0, me;
+    int  op=0, chave,ma=0, me,pos;
     char chavosa[50];
     dado *v, aux;
     double tempoEmMilissegundo = 0.0000000;
@@ -409,6 +556,22 @@ setlocale(LC_ALL,"");
 
             case 4:
                 cout<<"\n\tPESQUISA EM TABELA HASH\n";
+                cout<<"Room_id? ";
+                cin.ignore();
+                cin>>chave;
+                v = openFile(128001, 2);
+                for (int i=0;i<128001;i++){
+                    InserirHash(TabelaHash,tam,v[i].room_id);
+                }
+                StartCounter();
+                pos=PesquisarHash(TabelaHash, tam, chave);
+
+                tempoEmMilissegundo = GetCounter();
+                    if(aux.room_id!=0){
+                        Imprimir_pesquisa(aux);
+                    }
+                cout<<"\nTempo para realizar a pesquisa (MS): "<<tempoEmMilissegundo;
+                break;
 
                 break;
 
@@ -436,6 +599,7 @@ setlocale(LC_ALL,"");
         }
     }while((op<1)||(op>7));
 
+    free(TabelaHash);
     free(arvore);
     free(v);
     return 0;
